@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f8f5ef">
+<title>運命の休日</title>
+<style>
+:root{
+ --bg:#f8f5ef;--paper:#fffdf9;--ink:#514b47;--sub:#958b83;
+ --line:#ece5dc;--pink:#ead8d3;--sage:#dfe6dc;--blue:#dce6ea;
+ --shadow:0 10px 35px rgba(86,73,61,.08)
+}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}
+button,input,textarea{font:inherit}.app{max-width:480px;margin:auto;min-height:100vh;padding-bottom:92px}
+header{padding:25px 22px 12px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:Georgia,serif;font-size:25px;letter-spacing:.05em}.tiny{font-size:10px;color:var(--sub);letter-spacing:.08em}
+.page{display:none;padding:8px 17px}.page.active{display:block}
+.card{background:rgba(255,253,249,.94);border:1px solid rgba(230,222,212,.75);border-radius:27px;box-shadow:var(--shadow)}
+.hero{padding:34px 23px 28px;text-align:center;overflow:hidden;position:relative}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;filter:blur(1px);opacity:.65}
+.hero:before{width:120px;height:120px;background:var(--pink);top:-50px;right:-25px}.hero:after{width:100px;height:100px;background:var(--sage);bottom:-50px;left:-30px}
+.flower{font-size:31px;position:relative;z-index:1;margin-bottom:10px}.hero h1{font-family:Georgia,serif;font-weight:400;font-size:28px;margin:0 0 9px;position:relative;z-index:1}.hero p{font-size:12px;line-height:2;color:var(--sub);position:relative;z-index:1}
+.primary{border:0;background:#675f59;color:white;border-radius:999px;padding:14px 23px;font-size:13px;font-weight:600;box-shadow:0 7px 18px rgba(60,50,44,.14)}
+.primary.wide{width:100%;margin-top:12px}.soft{border:0;background:#f0e9e1;color:var(--ink);border-radius:999px;padding:12px 18px;font-size:12px}
+.result{margin-top:13px;padding:20px}.result.hidden{display:none}.resultHead{text-align:center;font-size:11px;color:var(--sub);letter-spacing:.12em;margin-bottom:16px}
+.item{padding:14px 2px;border-bottom:1px solid var(--line)}.item:last-of-type{border-bottom:0}.tag{font-size:9px;color:#a29285;letter-spacing:.16em;margin-bottom:4px}.value{font-size:16px;line-height:1.55}
+.bubble{margin:14px 0;padding:14px 16px;border-radius:17px;background:#f5eee7;font-size:11px;line-height:1.8;color:#82776e;text-align:center}
+.sectionTitle{font-family:Georgia,serif;font-size:23px;margin:8px 3px 15px}.hint{font-size:11px;color:var(--sub);line-height:1.8;margin:-6px 3px 15px}
+.nav{position:fixed;z-index:9;bottom:0;left:0;right:0;background:rgba(255,253,249,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.navinner{max-width:480px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr)}.nav button{border:0;background:none;color:#a1978e;font-size:10px;padding:11px 2px 13px}.nav button b{display:block;font-size:17px;font-weight:400;margin-bottom:3px}.nav button.active{color:#5e5650}
+.timer{text-align:center;padding:28px 20px}.timerCircle{width:185px;height:185px;border-radius:50%;margin:3px auto 19px;background:linear-gradient(145deg,#fffdf9,#eee7df);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 0 0 8px rgba(255,255,255,.55),0 10px 25px rgba(80,65,50,.08)}.timerNum{font-family:Georgia,serif;font-size:40px}.timerLabel{font-size:9px;color:var(--sub);letter-spacing:.13em}
+textarea,input{border:1px solid var(--line);background:#fffdf9;border-radius:16px;padding:13px;color:var(--ink);outline:none}textarea{width:100%;min-height:110px;resize:vertical}input{width:100%}
+.row{display:flex;gap:8px;margin-top:8px}.row>*{flex:1}
+.feedCard{padding:17px;margin-bottom:11px}.feedtop{display:flex;justify-content:space-between;align-items:center}.avatar{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:var(--pink);font-size:12px}.user{font-size:12px;font-weight:600}.minutes{font-size:9px;color:var(--sub);background:#f1ebe4;padding:5px 8px;border-radius:99px}.feedtext{font-size:13px;line-height:1.75;margin:12px 0}.like{border:0;background:none;color:#9b9087;font-size:11px;padding:0}
+.record{padding:17px;margin-bottom:11px}.recorddate{font-size:10px;color:var(--sub)}.recordname{font-size:14px;font-weight:600;margin:5px 0 8px}.recordline{font-size:11px;color:#81766d;line-height:1.7}.gain{margin-top:10px;background:#f5eee7;border-radius:15px;padding:11px;font-size:11px;line-height:1.7}
+.empty{text-align:center;padding:35px 20px;color:var(--sub);font-size:12px;line-height:2}
+.modal{display:none;position:fixed;z-index:20;inset:0;background:rgba(65,56,49,.28);padding:18px}.modal.show{display:flex;align-items:flex-end}.sheet{width:100%;max-width:480px;margin:auto;background:var(--paper);border-radius:28px;padding:23px;box-shadow:0 -10px 40px rgba(50,40,30,.12)}.sheet h2{font-family:Georgia,serif;font-weight:400;margin:0 0 8px}.sheet p{font-size:11px;color:var(--sub);line-height:1.7}
+.toast{position:fixed;z-index:30;bottom:88px;left:50%;transform:translateX(-50%) translateY(15px);opacity:0;background:#514a45;color:#fff;padding:11px 16px;border-radius:99px;font-size:11px;transition:.3s;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">運命の休日</div><div class="tiny">A LITTLE OFFLINE DAY</div></header>
+
+<section id="home" class="page active">
+<div class="card hero">
+ <div class="flower">✿</div><h1>今日は、偶然に<br>まかせてみる。</h1>
+ <p>いつもなら選ばないことを<br>ひとつだけ、選んでみよう。</p>
+ <button class="primary" onclick="draw()">今日の休日を引く　✦</button>
+</div>
+<div id="result" class="card result hidden">
+ <div class="resultHead">YOUR LITTLE FATE</div>
+ <div id="items"></div>
+ <div class="bubble">完璧にこなさなくて大丈夫。<br>気分に合わなかったら、もう一度引いてみてね。</div>
+ <button class="primary wide" onclick="openJournal()">休日のあとに記録する</button>
+ <button class="soft" style="width:100%;margin-top:8px" onclick="draw()">もう一度、引いてみる</button>
+</div>
+</section>
+
+<section id="offline" class="page">
+<div class="sectionTitle">OFFLINE TIME</div><div class="hint">スマホを置いている時間を、ちょっとだけ特別に。</div>
+<div class="card timer">
+ <div class="timerCircle"><div class="timerLabel">OFFLINE</div><div id="timerNum" class="timerNum">30:00</div></div>
+ <div class="row"><button class="primary" onclick="start()">はじめる</button><button class="soft" onclick="reset()">リセット</button></div>
+</div>
+<div class="card" style="padding:18px;margin-top:12px">
+ <div class="hint" style="margin:0 0 8px">終わったら、何をしていたか残してみよう。</div>
+ <textarea id="offText" placeholder="読書した / 散歩した / 勉強した / 何もしなかった、でもOK"></textarea>
+ <div class="row"><input id="offMin" type="number" placeholder="分"><button class="primary" onclick="saveOffline()">記録する</button></div>
+</div>
+</section>
+
+<section id="people" class="page">
+<div class="sectionTitle">みんなの休日</div><div class="hint">誰かの「今日はこんな日だった」を、そっと覗いてみる。</div>
+<div class="card" style="padding:18px;margin-bottom:13px">
+ <textarea id="post" placeholder="今日、スマホを置いて何した？"></textarea>
+ <div class="row"><input id="postMin" type="number" placeholder="OFFLINE 分"><button class="primary" onclick="post()">シェアする</button></div>
+</div>
+<div id="feed"></div>
+</section>
+
+<section id="journal" class="page">
+<div class="sectionTitle">わたしの休日</div><div class="hint">あとから見返したとき、今日の自分に会える場所。</div>
+<div id="records"></div>
+</section>
+</div>
+
+<div class="nav"><div class="navinner">
+<button class="active" id="nav-home" onclick="page('home')"><b>✿</b>運命</button>
+<button id="nav-offline" onclick="page('offline')"><b>◷</b>OFFLINE</button>
+<button id="nav-people" onclick="page('people')"><b>♡</b>みんな</button>
+<button id="nav-journal" onclick="page('journal')"><b>⌇</b>記録</button>
+</div></div>
+
+<div id="modal" class="modal"><div class="sheet">
+<h2>今日、得たもの</h2><p>大きな発見じゃなくて大丈夫。<br>「楽しかった」「意外だった」だけでも、未来の自分へのメモになるよ。</p>
+<textarea id="gain" placeholder="今日の休日で得たものは？"></textarea>
+<input id="title" style="margin-top:9px" placeholder="タイトルをつけるなら（任意）">
+<div class="row"><button class="soft" onclick="closeModal()">あとで</button><button class="primary" onclick="saveJournal()">残す</button></div>
+</div></div><div id="toast" class="toast"></div>
+
+<script>
+const D={
+where:["知らない駅で降りて散歩","気になっていた古着屋","大きな本屋","美術館・ギャラリー","植物園","海の見える場所","川沿い","商店街","市場・マーケット","公園","図書館","映画館","レコードショップ","雑貨屋を巡る","カフェの多い街","昔ながらの街並み","ホテルのラウンジ","展望できる場所","静かな路地","近所の知らないエリア","隣の駅","反対方向の電車の終点","商業施設","アウトレット","蚤の市","フリーマーケット","家具屋","花屋","パン屋が多い街","海辺の街","山が見える街","住宅街","大学の近くの知らない場所","駅前を一周","夜の街","朝の街","夕方の街","小さな喫茶店","テラス席のある店","屋上","ファッション街","商業ビル","昔よく行った場所","子どもの頃の記憶がある場所","地図で目を閉じて選んだ場所","名前が気になった駅","気になる看板の店","偶然見つけた路地","写真を撮りたくなる街","自宅から30分以内の未知の場所"],
+what:["知らない店で一品選ぶ","古着を1着だけ試着する","本を1冊選ぶ","展示をひとつじっくり見る","街の色を10個撮る","知らない道を30分歩く","おすすめを店員さんに聞く","喫茶店で手紙を書く","1000円以内で小さな買い物","一人映画","レコードを3枚試聴する","花を一輪買う","朝ごはんを外で食べる","夕方の街を散歩する","知らないメニューを頼む","気になる看板を集める","街の音を5つ探す","気になる服を3着見る","本屋で偶然開いた本を読む","写真を10枚だけ撮る","公園で何もしない","カフェで30分ぼーっとする","店のディスプレイを観察する","街の人の服装を観察する","自分への小さなギフトを探す","普段着ない色を試着する","新しい香りを試す","気になる雑誌を読む","知らないジャンルの映画を見る","料理を一品作る","部屋の一角だけ模様替え","クローゼットを10着整理する","昔の写真を整理する","1時間だけ勉強する","ノートに今考えていることを書く","好きな曲を10曲集める","新しいプレイリストを作る","散歩しながら音楽を聴く","スマホなしで昼食を食べる","夕日を見る","朝日を見る","知らないパン屋へ行く","気になった場所を地図に保存","街で見つけた文字を撮る","100円ショップで創作材料を探す","小さな絵を描く","コラージュを作る","服のスタイリングを3パターン考える","自分の好きなものを10個書く","今日初めて見たものを5個記録する"],
+bring:["お気に入りの本","小さなノート","フィルムカメラ","イヤホン","ペン1本","水筒","小さなバッグ","サングラス","帽子","いつもの香水","文庫本","スケッチブック","財布だけ","カメラ","折りたたみ傘","お気に入りのアクセサリー","小さなお気に入り","何も追加で持たない","メモ帳","好きなステッカー"],
+rule:["スマホを30分見ない","SNSを開かない","時計を見ない","知らない道を1本選ぶ","1000円以上使わない","写真は10枚まで","店員さんに1回質問する","「面白そう」で決める","予定を1つ変える","一人で過ごす","イヤホンを外す時間を作る","カフェで15分何もしない","初めて見るものを3つ探す","今日の色を1色決める","空を3回見る","買う前に10分考える","知らない店に1軒入る","帰り道を変える","紙に1つ感想を書く","今日のベスト瞬間を1つ残す"]
+};
+let current=null,timer=null,sec=1800;
+const get=(k,d)=>JSON.parse(localStorage.getItem(k)||JSON.stringify(d)),set=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function page(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));document.getElementById("nav-"+id).classList.add("active");if(id==="people")renderFeed();if(id==="journal")renderRecords();scrollTo(0,0)}
+function draw(){current={where:pick(D.where),what:pick(D.what),bring:pick(D.bring),rule:pick(D.rule),date:new Date().toISOString()};document.getElementById("items").innerHTML=`<div class="item"><div class="tag">WHERE</div><div class="value">${current.where}</div></div><div class="item"><div class="tag">WHAT</div><div class="value">${current.what}</div></div><div class="item"><div class="tag">BRING</div><div class="value">${current.bring}</div></div><div class="item"><div class="tag">TODAY'S LITTLE RULE</div><div class="value">${current.rule}</div></div>`;document.getElementById("result").classList.remove("hidden");document.getElementById("result").animate([{opacity:0,transform:"translateY(12px)"},{opacity:1,transform:"translateY(0)"}],{duration:500,easing:"ease-out"})}
+function openJournal(){if(!current)return;document.getElementById("gain").value="";document.getElementById("title").value="";document.getElementById("modal").classList.add("show")}
+function closeModal(){document.getElementById("modal").classList.remove("show")}
+function saveJournal(){let gain=document.getElementById("gain").value.trim();if(!gain){toast("ひとことでも残してみてね ✿");return}let a=get("journals",[]);a.unshift({...current,gain,title:document.getElementById("title").value.trim()||"ある日の休日"});set("journals",a);closeModal();toast("休日を残したよ ♡");page("journal")}
+function renderRecords(){let a=get("journals",[]),el=document.getElementById("records");if(!a.length){el.innerHTML='<div class="card empty">まだ休日の記録がないよ。<br>今日の小さな出来事を、ひとつ残してみよう。</div>';return}el.innerHTML=a.map((r,i)=>`<div class="card record"><div onclick="detail(${i})"><div class="recorddate">${new Date(r.date).toLocaleDateString("ja-JP",{year:"numeric",month:"long",day:"numeric"})}</div><div class="recordname">${safe(r.title)}</div><div class="recordline">${safe(r.where)} ・ ${safe(r.what)}</div><div class="gain">✿ ${safe(r.gain)}</div></div><button class="soft" style="width:100%;margin-top:12px" onclick="event.stopPropagation();deleteRecord(${i})">この記録を削除</button></div>`).join("")}
+function detail(i){let r=get("journals",[])[i];alert(`${new Date(r.date).toLocaleDateString("ja-JP")}\n\n${r.title}\n\nWHERE　${r.where}\nWHAT　${r.what}\nBRING　${r.bring}\nRULE　${r.rule}\n\n今日、得たもの\n${r.gain}`)}
+function deleteRecord(i){let a=get("journals",[]);if(!a[i])return;let ok=confirm("この記録を削除する？\n削除すると元に戻せません。");if(!ok)return;a.splice(i,1);set("journals",a);renderRecords();toast("記録を削除したよ") }
+function start(){if(timer)return;timer=setInterval(()=>{if(sec<=0){clearInterval(timer);timer=null;toast("OFFLINE TIME、おつかれさま ✿");return}sec--;update()},1000)}
+function reset(){clearInterval(timer);timer=null;sec=1800;update()}
+function update(){document.getElementById("timerNum").textContent=String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")}
+function saveOffline(){let t=document.getElementById("offText").value.trim(),m=Number(document.getElementById("offMin").value)||0;if(!t){toast("何をしていたか書いてみてね");return}addPost(t,m);document.getElementById("offText").value="";document.getElementById("offMin").value="";toast("OFFLINE TIMEを残したよ ♡");page("people")}
+function post(){let t=document.getElementById("post").value.trim(),m=Number(document.getElementById("postMin").value)||0;if(!t){toast("投稿を書いてみてね");return}addPost(t,m);document.getElementById("post").value="";document.getElementById("postMin").value="";renderFeed();toast("みんなにシェアしたよ ♡")}
+function addPost(text,mins){let a=get("posts",[]);a.unshift({name:"you",text,mins,date:new Date().toISOString(),likes:0});set("posts",a)}
+function like(i){let a=get("posts",[]);a[i].likes=(a[i].likes||0)+1;set("posts",a);renderFeed()}
+function renderFeed(){let samples=[{name:"mika",text:"スマホを置いて、気になってた古着屋を3軒。最後に見つけたジャケットが今日の収穫。",mins:92,likes:18},{name:"haru",text:"図書館で1時間半。本を読むだけの時間って、思ってたより心地よかった。",mins:90,likes:26},{name:"nono",text:"夕方ひとりで散歩。知らない路地で小さな花屋を見つけた。",mins:48,likes:11},{name:"sora",text:"勉強45分。そのあと外に出たら、ずっと家にいるより気分が軽くなった。",mins:45,likes:34}],user=get("posts",[]),all=[...user,...samples],el=document.getElementById("feed");el.innerHTML=all.map((p,i)=>`<div class="card feedCard"><div class="feedtop"><div style="display:flex;gap:9px;align-items:center"><div class="avatar">${p.name[0].toUpperCase()}</div><div class="user">${safe(p.name)}</div></div><div class="minutes">${p.mins||0} min OFFLINE</div></div><div class="feedtext">${safe(p.text)}</div><button class="like" onclick="like(${i})">♡ ${p.likes||0}</button></div>`).join("")}
+function safe(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function toast(t){let x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
+update();renderFeed();
+</script>
+</body>
+</html>
